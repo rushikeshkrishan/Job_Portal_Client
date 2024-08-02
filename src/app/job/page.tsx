@@ -1,8 +1,13 @@
-import React from 'react'
+
+import JobCard from '@/components/job-card'
+import React, { Suspense } from 'react'
+Suspense
 
 function JobPage() {
   return (
-    <h1>JobPage</h1>
+    <Suspense fallback={"loading"}>
+      <JobCard />
+    </Suspense>
   )
 }
 

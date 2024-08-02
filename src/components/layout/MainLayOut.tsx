@@ -13,6 +13,8 @@ import {
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import Link from "next/link";
+import Advertisement from "../Advertisement";
+import { usePathname } from "next/navigation";
 
 const { Header, Sider, Content } = Layout;
 type MenuItem = Required<MenuProps>['items'][number];
@@ -30,7 +32,6 @@ function getItem(
     label,
   } as MenuItem;
 }
-
 const items: MenuItem[] = [
   getItem(<Link href="/">Home</Link>, '1', <PieChartOutlined />),
   getItem(<Link href="/job">Job</Link>, '2', <DesktopOutlined />),
@@ -48,21 +49,23 @@ const items: MenuItem[] = [
   getItem(<Link href="/user/setting">Setting</Link>, '14', <FileOutlined />),
 ];
 const MainLayOut: React.FC = ({ children }: any) => {
+  const pathName = usePathname();
   const [collapsed, setCollapsed] = useState(true);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  console.log("pathName", pathName);
 
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed} defaultCollapsed={true}>
         <div className="demo-logo-vertical" />
         <Menu
-        theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} 
+          theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items}
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer,height:"7vh",display:"flex", alignItems:"center",justifyContent:"space-between" }}>
+        <Header style={{ padding: 0, background: colorBgContainer, height: "7vh", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -71,33 +74,37 @@ const MainLayOut: React.FC = ({ children }: any) => {
               fontSize: "16px",
             }}
           />
-         <div style={{padding:".6rem" ,display:"flex",gap:".5rem"}}>
-        <Link href="/login">
-        <Button
-            type="primary"
-            >Login </Button>
-        </Link>
-          <Link href="/register">
-          <Button
-            type="default"
-            >Register </Button>
-          </Link>
-         </div>
+          <div style={{ padding: ".6rem", display: "flex", gap: ".5rem" }}>
+            <Link href="/login">
+              <Button
+                type="primary"
+              >Login </Button>
+            </Link>
+            <Link href="/register">
+              <Button
+                type="default"
+              >Register </Button>
+            </Link>
+          </div>
         </Header>
         <Content
           style={{
             margin: "24px 16px",
             padding: 24,
             height: "87vh",
+            minWidth:"768px",
             // background: colorBgContainer,
             background: "transparent",
-            overflow:"auto",
-            overflowX:"hidden",
+            overflow: "auto",
+            overflowX: "hidden",
             borderRadius: borderRadiusLG,
-            
+
           }}
         >
-          {children}
+          <div style={{ display: "flex", alignItems: "flex-start", flex: "wrap" }}>
+            <div style={{ width: pathName === "/" ? "100%" : "80%" }}>{children}</div>
+            {pathName !== "/" && <Advertisement />}
+          </div>
         </Content>
       </Layout>
     </Layout>
